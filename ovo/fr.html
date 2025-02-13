@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./anim.css">
+    <link rel="stylesheet" href="hmmg_layoutTransition.css">
+</head>
+<body style="overflow: hidden;" oncontextmenu="return false;">
+    <div id="fb-root"></div>
+      <div id="c2canvasdiv">
+        <canvas id="c2canvas" width="640" height="640">
+            <h1>
+                Your browser does not appear to support HTML5. Try upgrading your browser to the latest version.
+                <a href="http://www.whatbrowser.org">What is a browser?</a>
+                <br /><br />
+                <a href="http://www.microsoft.com/windows/internet-explorer/default.aspx">Microsoft Internet Explorer</a><br />
+                <a href="http://www.mozilla.com/firefox/">Mozilla Firefox</a><br />
+                <a href="http://www.google.com/chrome/">Google Chrome</a><br />
+                <a href="http://www.apple.com/safari/download/">Apple Safari</a>
+            </h1>
+        </canvas>
+    </div>
+    <script>
+        const jquery = document.createElement("script")
+        jquery.src = "/ovo/jquery.min.js"
+        jquery.onload = ()=>{
+            const gritter = document.createElement("script")
+            gritter.src = "/ovo/gritter.min.js"
+            gritter.onload = ()=>{
+                const howler = document.createElement("script")
+                howler.src = "/ovo/howler.js"
+                howler.onload = ()=>{
+                    const analytic = document.createElement("script")
+                    analytic.src = "/ovo/gAnalytics.js"
+                    analytic.onload = ()=>{             
+                        const tween = document.createElement("script")
+                        tween.src = "/ovo/tween.js"
+                        tween.onload = ()=>{             
+                            const engine = document.createElement("script")
+                            engine.src = "/ovo/c2runtime.js"
+                            engine.onload = ()=>{             
+                                // Start the Construct 2 project running on window load.
+                                jQuery(document).ready(function () {
+                                    // Create new runtime using the c2canvas
+                                    cr_createRuntime("c2canvas");
+                                });
+
+                                // Pause and resume on page becoming visible/invisible
+                                function onVisibilityChanged() {
+                                    if (
+                                    document.hidden ||
+                                    document.mozHidden ||
+                                    document.webkitHidden ||
+                                    document.msHidden
+                                    )
+                                    cr_setSuspended(true);
+                                    else cr_setSuspended(false);
+                                }
+
+                                document.addEventListener("visibilitychange", onVisibilityChanged, false);
+                                document.addEventListener(
+                                    "mozvisibilitychange",
+                                    onVisibilityChanged,
+                                    false
+                                );
+                                document.addEventListener(
+                                    "webkitvisibilitychange",
+                                    onVisibilityChanged,
+                                    false
+                                );
+                                document.addEventListener(
+                                    "msvisibilitychange",
+                                    onVisibilityChanged,
+                                    false
+                                );
+
+                                function OnRegisterSWError(e) {
+                                    console.warn("Failed to register service worker: ", e);
+                                }
+
+                                // Runtime calls this global method when ready to start caching (i.e. after startup).
+                                // This registers the service worker which caches resources for offline support.
+                                window.C2_RegisterSW = function C2_RegisterSW() {
+                                    if (!navigator.serviceWorker) return; // no SW support, ignore call
+
+                                    try {
+                                    navigator.serviceWorker
+                                        .register("sw.js", { scope: "./" })
+                                        .then(function (reg) {
+                                        console.log("Registered service worker on " + reg.scope);
+                                        })
+                                        .catch(OnRegisterSWError);
+                                    } catch (e) {
+                                    OnRegisterSWError(e);
+                                    }
+                                };
+                            }
+                            document.body.appendChild(engine)
+                        }
+                        document.body.appendChild(tween)
+                    }
+                    document.body.appendChild(analytic)
+                }
+                document.body.appendChild(howler)
+            }
+            document.body.appendChild(gritter)
+        }
+        document.body.appendChild(jquery)
+    </script>
+</body>
+</html>

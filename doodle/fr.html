@@ -1,0 +1,25 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<script type="text/javascript" src="./phaser.min.js"></script>
+		<script type="text/javascript" src="./fulltilt.min.js"></script>
+		<script type="text/javascript" src="./NoSleep.min.js"></script>
+	</head>
+	<body style="overflow: hidden;" oncontextmenu="return false;">
+		<input id="highscore" type="text" style="display: none;" />
+		<script type="text/javascript" src="./production.min.js"></script> 
+		<script src="./loader.js"></script>  
+		<script> 
+            var noSleep = new NoSleep();
+
+            function enableNoSleep() {
+                noSleep.enable();
+                document.removeEventListener('touchstart', enableNoSleep, false);
+            }
+
+
+            document.addEventListener('touchstart', enableNoSleep, false);
+        </script>
+	</body>
+</html>
